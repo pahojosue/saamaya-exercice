@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mysql://root:hey_123@db:3307/saamaya
+      - PORT=3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=saamaya
+      - MYSQL_USER=paho
+      - MYSQL_PASSWORD=hop_123
+      - MYSQL_ROOT_PASSWORD=hey_123
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10

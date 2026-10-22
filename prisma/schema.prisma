@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+model Wallet {
+  id           String        @id @default(uuid())
+  balance      BigInt        @default(0) // Stocké en entier (XAF)
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Transaction {
+  id             String   @id @default(uuid())
+  walletId       String
+  type           TxType
+  amount         BigInt
+  idempotencyKey String
+  createdAt      DateTime @default(now())
+  wallet         Wallet   @relation(fields: [walletId], references: [id])
+
+  @@unique([walletId, idempotencyKey])
+}
+
+enum TxType {
+  CREDIT
+  DEBIT
+}
