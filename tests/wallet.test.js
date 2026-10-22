@@ -1,4 +1,4 @@
-import request from 'supertest'; // Correction : Import par défaut, pas de destructuration
+import request from 'supertest';
 import app from "../app.js";
 import { PrismaClient } from '@prisma/client';
 
@@ -8,7 +8,6 @@ describe('Wallet API', () => {
   let walletId;
 
   beforeAll(async () => {
-    // Nettoyage de la base de test
     await prisma.transaction.deleteMany();
     await prisma.wallet.deleteMany();
   });
